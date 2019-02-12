@@ -8,7 +8,7 @@ from hashlib import sha256
 import os
 from tools import getbytes, tobytes
 
-KEYFOLDER = "keys/"
+KEYFOLDER = "../keys/"
 
 class Keys:
   def __init__(self):
@@ -16,7 +16,7 @@ class Keys:
     self.importKeys()
   def saveToFile(self):
     for (key, pub) in self.keys:
-      s = tobytes(key,16)
+      s = tobytes(key, 32)
       hash = sha256()
       hash.update(s)
       filename = hash.hexdigest()[:8]

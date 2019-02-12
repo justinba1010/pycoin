@@ -20,33 +20,33 @@ class Transaction:
     serial += to_bytes(len(origins), 1)
     serial += to_bytes(len(destinations), 1)
     for origin in self.origins:
-      #  16 bytes for each input
-      serial += tobytes(origin[0], 8)
-      serial += tobytes(origin[1], 8)
+      #  64 bytes for each input
+      serial += tobytes(origin[0], 32)
+      serial += tobytes(origin[1], 32)
     for destination in self.destinations:
       #  16 bytes for each output
-      serial += tobytes(destination[0], 8)
-      serial += tobytes(destination[1], 8)
+      serial += tobytes(destination[0], 32)
+      serial += tobytes(destination[1], 32)
     return serial
   def serialize(self):
     serial = self.serialize_unhashed()
     for signature in self.signatures:
-      serial += tobytes(signature[0], 8)
-      serial += tobytes(signature[1], 8)
+      serial += tobytes(signature[0], 32)
+      serial += tobytes(signature[1], 32)
     return serial
   def fromSerial(self, message):
     (nInputs, message) = getbytes(1, message)
     (nOutputs, message) = getbytes(1, message)
     for i in range(nInputs):
-      (txid, message) = getbytes(8, message)
-      (address, message) = getbytes(8, message)
+      (txid, message) = getbytes(32, message)
+      (address, message) = getbytes(32, message)
       self.origins.append((txid, address))
     for i in range(nOutputs):
-      (address, message) = getbytes(8, message)
-      (value, message) = getbytes(8, message)
+      (address, message) = getbytes(32, message)
+      (value, message) = getbytes(32, message)
       self.destinations.append((address, value))
-    while(len(message) >= 16):
-      self.signatures.append((getbytes(8, message), getbytes(8, message)))
+    while(len(message) >= 64):
+      self.signatures.append((getbytes(32, message), getbytes(32, message)))
     if(len(message) != 0):
       raise(Exception("Transaction is malformed"))
 
