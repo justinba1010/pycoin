@@ -1,5 +1,6 @@
 # Avoid pushing cachee
 __pycache__
+*/__pycache__
 
 # Avoid pushing .pyc
 *.pyc
