@@ -8,7 +8,7 @@
   * Second 8 bytes -> address of using input
 * Outputs - 16 bytes each
   * First 8 bytes -> address of output
-  * Second 8 bytes -> amount being sent(64 bits unsigned, should be maxed out at 0x8000000000000000, so we don't have any issues on C written protocols)
+  * Second 8 bytes -> amount being sent(64 bits unsigned, should be maxed out at 0x8000000000000000, this was a major bug in Bitcoin, with negatives passing the tx verification, but it would actually create a lot of bitcoin for the addressholder) if I remember this bug came out in like 2010/2011, and it was patched very fast.
     * This gives us an upper limit of 9223372036854775808 denominations with 63 bits
 * Signatures
   * Each input appends its signature of the hash(SHA256) of the unsigned serialization
