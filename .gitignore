@@ -1,0 +1,10 @@
+# Avoid pushing cachee
+__pycache__
+
+# Avoid pushing .pyc
+*.pyc
+*/*.pyc
+*/*/*.pyc
+
+# Avoid pushing keys
+keys/
