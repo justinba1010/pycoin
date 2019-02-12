@@ -2,6 +2,7 @@
 
 ## Transactions
 ---
+* Header 2 bytes
 * Inputs - 16 bytes each
   * First 8 bytes -> tx-id of input
   * Second 8 bytes -> address of using input
@@ -12,7 +13,9 @@
 * Signatures
   * Each input appends its signature of the hash(SHA256) of the unsigned serialization
 * Signed Serialization
-  * Each signature is 8 bytes in the order of the inputs
+  * Each signature is 16 bytes in the order of the inputs
+    * First 8 bytes is the r to the signature
+    * Second 8 bytes is the s to the signature
   * It is appended to the end of the serialization to make a valid tx
 
 

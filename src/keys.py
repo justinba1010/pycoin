@@ -6,6 +6,7 @@
 from fastecdsa import curve, ecdsa, keys
 from hashlib import sha256
 import os
+from tools import getbytes, tobytes
 
 KEYFOLDER = "keys/"
 
@@ -15,7 +16,7 @@ class Keys:
     self.importKeys()
   def saveToFile(self):
     for (key, pub) in self.keys:
-      s = key.to_bytes(256, byteorder="big")
+      s = tobytes(key,16)
       hash = sha256()
       hash.update(s)
       filename = hash.hexdigest()[:8]
@@ -32,3 +33,13 @@ class Keys:
   def getaddresses(self):
     # Return addresses as hex(public key x coord)
     return list(map(lambda x: hex(x[1].x), self.keys))
+  def signTX(self, trans):
+    m = trans.serialize_unhashed().decode()
+    # Get currect keys to sign...
+    (r,s) = ecdsa.sign(m, self.keys[0][0], curve=curve.secp256k1, hashfunc=sha256)
+    trans.signatures.append((r,s))
+  #def verify(self, publickey, )
+
+key = Keys()
+print(key.keys)
+print(key.getaddresses())
