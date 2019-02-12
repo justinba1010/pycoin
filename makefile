@@ -6,6 +6,3 @@ init:
 clean-keys:
 	echo "This is a really bad idea if this were real."
 	bash ./scripts/kindadangerous.sh
-
-delete-delete:
-	bash ./scripts/actuallydangerous.sh
