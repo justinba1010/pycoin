@@ -2,7 +2,8 @@
 
 ## Installing
 
-To install, this needs the dependencies, `fastecdsa` which can be installed with `pip`.
+To install just make sure you have Python 3.7.
+Run `make install`
 
 ## Running
 
@@ -11,7 +12,7 @@ It will at the moment generate a new key-pair, and spit out the public key(addre
 
 To clean up, run `make clean-keys`.
 
-To remove this from your system, run make `make delete-delete`.
+To run test script, run `make test`
 
 ## Current Status
 ![pycoin](https://github.com/justinba1010/pycoin/blob/master/img/current.png)
