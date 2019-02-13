@@ -36,7 +36,7 @@ class Keys:
     # Return addresses as hex(public key x coord)
     return list(map(lambda x: hex(x[1].x), self.keys))
   def signTX(self, trans, nkey = 0):
-    m = trans.serialize_unhashed().decode()
+    m = trans.serialize_unsigned()
     # Get currect keys to sign...
     (r,s) = ecdsa.sign(m, self.keys[nkey][0], curve=curve.secp256k1, hashfunc=sha256)
     trans.signatures.append((self.keys[nkey][1].x, self.keys[nkey][1].y, r,s))

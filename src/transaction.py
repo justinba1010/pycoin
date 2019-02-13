@@ -59,3 +59,8 @@ class Transaction:
       (q, message)  = getbytes(4, message)
       self.signatures((px, py, r, q))
     # Signatures
+  def get_unsigned_hash(self):
+    m = self.serialize_unsigned()
+    hash = sha256()
+    hash.update(m)
+    
