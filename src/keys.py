@@ -39,5 +39,5 @@ class Keys:
     m = trans.serialize_unhashed().decode()
     # Get currect keys to sign...
     (r,s) = ecdsa.sign(m, self.keys[nkey][0], curve=curve.secp256k1, hashfunc=sha256)
-    trans.signatures.append((r,s))
+    trans.signatures.append((self.keys[nkey][1].x, self.keys[nkey][1].y, r,s))
   #def verify(self, publickey, )

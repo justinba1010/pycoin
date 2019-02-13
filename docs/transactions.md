@@ -12,11 +12,9 @@
     * This gives us an upper limit of 9223372036854775808 denominations with 63 bits
 * Signatures
   * Each input appends its signature of the hash(SHA256) of the unsigned serialization
-* Signed Serialization
-  * Each signature is 64 bytes in the order of the inputs
-    * First 32 bytes is the r to the signature
-    * Second 32 bytes is the s to the signature
-  * It is appended to the end of the serialization to make a valid tx
+  * First 32 bytes public x
+  * Second 32 bytes public y
+  * Third 32 bytes signature r
 
 
 ## Serialized Unsigned Transactions
@@ -29,4 +27,5 @@
 ## Serialized Signed Transaction
 ---
 * Serialized tx
-* 8 bytes -> each signature of the hash of the serialized tx in the order of inputs
+* 1 bytes -> number of signatures
+* 128 bytes -> each signature
