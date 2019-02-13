@@ -56,6 +56,14 @@ class Block:
     hash.update(m)
     return hash.hexdigest()
   # Utilities
+  def from_serial(self, message):
+    (self.blockNo, message) = getbytes(4, message)
+    (self.blockNo, message) = getbytes(4, message)
+    (self.blockNo, message) = getbytes(4, message)
+    (self.blockNo, message) = getbytes(4, message)
+    (self.blockNo, message) = getbytes(4, message)
+    (self.blockNo, message) = getbytes(4, message)
+    
   def mine(self):
     while int(self.get_hash(), 16) > 2**(256-self.difficulty):
       self.__incremement_nonce()
