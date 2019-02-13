@@ -8,4 +8,4 @@ To clean up, run `make clean-keys`.
 To remove this from your system, run make `make delete-delete`.
 
 ## Current Status
-![pycoin](https://github.com/justinba1010/pycoin/blob/master/img/current.png|alt=pycoin)
+![pycoin](https://github.com/justinba1010/pycoin/blob/master/img/current.png)
