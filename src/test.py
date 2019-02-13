@@ -28,3 +28,6 @@ block.difficulty = 16
 block.mine()
 print("The block finished mining at nonce: " + str(block.nonce))
 print("The new hash is: " + str(block.get_hash()))
+
+print("Saving keys, keys made for blocks are automatically saved.")
+wallet.saveToFile()
