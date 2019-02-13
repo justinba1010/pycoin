@@ -6,6 +6,8 @@
 ENDIANNESS = "big"
 
 def tobytes(int, padding):
+  if int == None:
+    int = 0
   return (int).to_bytes(padding, byteorder=ENDIANNESS)
 
 def getbytes(nbytes, message):

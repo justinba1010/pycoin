@@ -4,7 +4,7 @@
 # transaction.py
 
 from hashlib import sha256
-from tools import to_bytes, getbytes
+from tools import tobytes, getbytes
 
 class Transaction:
   def __init__(self, origins = [], destinations = []):
@@ -17,8 +17,8 @@ class Transaction:
   def serialize_unhashed(self):
     #  start a byte sequence
     serial = tobytes(0,0)
-    serial += to_bytes(len(origins), 1)
-    serial += to_bytes(len(destinations), 1)
+    serial += tobytes(len(self.origins), 1)
+    serial += tobytes(len(self.destinations), 1)
     for origin in self.origins:
       #  64 bytes for each input
       serial += tobytes(origin[0], 32)
@@ -34,7 +34,7 @@ class Transaction:
       serial += tobytes(signature[0], 32)
       serial += tobytes(signature[1], 32)
     return serial
-  def fromSerial(self, message):
+  def from_serial(self, message):
     (nInputs, message) = getbytes(1, message)
     (nOutputs, message) = getbytes(1, message)
     for i in range(nInputs):
@@ -45,10 +45,4 @@ class Transaction:
       (address, message) = getbytes(32, message)
       (value, message) = getbytes(32, message)
       self.destinations.append((address, value))
-    while(len(message) >= 64):
-      self.signatures.append((getbytes(32, message), getbytes(32, message)))
-    if(len(message) != 0):
-      raise(Exception("Transaction is malformed"))
-
-tx = Transaction([(10,20),(15,30)],[(10,30)])
-print(tx.serialize_unhashed())
+    # Signatures
