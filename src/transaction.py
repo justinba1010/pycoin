@@ -63,4 +63,6 @@ class Transaction:
     m = self.serialize_unsigned()
     hash = sha256()
     hash.update(m)
+    return hash.hexdigest()
+    
     
