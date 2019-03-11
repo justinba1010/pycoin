@@ -5,7 +5,7 @@
 
 import time
 from hashlib import sha256
-from tools import tobytes, getbytes
+from tools import tobytes, getbytes, hextoint
 
 # internals
 from transaction import Transaction
@@ -36,8 +36,10 @@ class Block:
     lastTx = Transaction([], [(self.owner, self.__get_block_reward())])
     self.keys.signTX(lastTx)
     return lastTx
+
   def genesis_block(self):
     return 0
+  # serialize() => bytes
   def serialize(self):
     serial = tobytes(0,0)
     # Add Block Header
@@ -50,11 +52,13 @@ class Block:
     for tx in self.tx:
       serial += tx.serialize()
     return serial
+  # get_hash() => int
   def get_hash(self):
     m = self.serialize()
     hash = sha256()
     hash.update(m)
-    return hash.hexdigest()
+    return hextoint(hash.hexdigest())
+
   # Utilities
   def from_serial(self, message):
     (self.blockNo, message) = getbytes(4, message)
@@ -65,15 +69,25 @@ class Block:
     (self.blockNo, message) = getbytes(4, message)
     
   def mine(self):
-    while int(self.get_hash(), 16) > 2**(256-self.difficulty):
+    while self.get_hash() > 2**(256-self.difficulty):
       self.__incremement_nonce()
 
+  # __get_generated() => int
   def __get_generated(self):
     return kFirstReward >> int(self.blockNo/kHalvingBlocks)
-  def __get_block_reward():
+
+  # __get_block_reward() => int
+  def __get_block_reward(self):
     # Add up unspent inputs
     unspent_inputs = self.__calculate_unspent()
     return 0
+
   def __incremement_nonce(self):
     self.nonce += 1
+    if self.nonce == 2**32:
+      print("This block cannot be mined.")
     self.nonce %= 2**32
+
+  # __calculate_unspent() => int
+  def __calculate_unspent(self):
+    return 0

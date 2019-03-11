@@ -1,6 +1,7 @@
 
 init:
 	mkdir ./keys || true
+	mkdir ./keys/blockkeys || true
 	bash ./scripts/gen_address.sh
 
 clean-keys:
