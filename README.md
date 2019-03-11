@@ -2,7 +2,7 @@
 
 ## Installing
 
-To install just make sure you have Python 3.7.
+To install just make sure you have Python >= 3.7.
 Run `make install`
 
 ## Running
