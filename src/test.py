@@ -8,10 +8,11 @@ ourkey = wallet.keys[-1]
 print("Private key: " + str(ourkey[0]))
 print("Public x: " + str(ourkey[1].x))
 print("Public y: " + str(ourkey[1].y))
+for counter, address in enumerate(wallet.getaddresses()):
+  print("Wallet Address " + str(counter) + ": " + str(address))
 
 tx = Transaction()
 wallet.signTX(tx, -1)
-print("Wallet signatures: ")
 print(tx.signatures)
 
 print("The new TX hash is: ")

@@ -7,7 +7,7 @@ from fastecdsa import curve, ecdsa, keys
 from hashlib import sha256
 import os
 
-from tools import getbytes, tobytes
+from tools import getbytes, tobytes, tob58
 
 KEYFOLDER = "../keys/"
 
@@ -33,8 +33,8 @@ class Keys:
         d, Q = keys.import_key(KEYFOLDER+file)
         self.keys.append((d,Q))
   def getaddresses(self):
-    # Return addresses as hex(public key x coord)
-    return list(map(lambda x: hex(x[1].x), self.keys))
+    # Return addresses as b58(public key x coord)
+    return list(map(lambda x: str(tob58(x[1].x)), self.keys))
   def signTX(self, trans, nkey = 0):
     m = trans.serialize_unsigned()
     # Get currect keys to sign...
