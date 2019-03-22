@@ -2,13 +2,13 @@
 
 ## Installing
 
-To install just make sure you have Python >= 3.7.
+System is required to have Python 3.7 or greater to install.
 Run `make install`
 
 ## Running
 
-To generate an address, run `make`.
-It will at the moment generate a new key-pair, and spit out the public key(address) in decimal.
+To generate an address, run `make'.
+'make' will generate a new key-pair and spit out the public key (address) in decimal. 
 
 To clean up, run `make clean-keys`.
 
