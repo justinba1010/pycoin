@@ -5,7 +5,9 @@
 
 import time
 from hashlib import sha256
-from tools import tobytes, getbytes, hextoint
+from tools import tobytes, getbytes, hextoint, gethash, getbytes
+from merkle import MerkleList
+import __blockparams
 
 # internals
 from transaction import Transaction
@@ -40,15 +42,19 @@ class Block:
   def genesis_block(self):
     return 0
   # serialize() => bytes
-  def serialize(self):
+  def gen_header(self):
     serial = tobytes(0,0)
     # Add Block Header
     serial += tobytes(self.blockNo, 4)
     serial += tobytes(self.nonce, 4)
-    serial += tobytes(self.prevhash, 8)
-    serial += tobytes(self.timestamp, 4)
-    serial == tobytes(self.difficulty, 4)
+    serial += tobytes(self.prevhash, 32)
+    serial += tobytes(self.get_merkle(), 32)
+    serial += tobytes(self.timestamp, 8)
+    serial += tobytes(self.difficulty, 4)
     serial += tobytes(len(self.tx), 4)
+    return serial
+  def serialize(self):
+    serial = self.gen_header()
     for tx in self.tx:
       serial += tx.serialize()
     return serial
@@ -71,6 +77,10 @@ class Block:
   def mine(self):
     while self.get_hash() > 2**(256-self.difficulty):
       self.__incremement_nonce()
+
+  def get_merkle(self):
+    merklelist = MerkleList(list(map(lambda x: x.get_hash_bytes(), self.tx)))
+    return merklelist.merkleroot()
 
   # __get_generated() => int
   def __get_generated(self):
