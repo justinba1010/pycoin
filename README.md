@@ -3,16 +3,17 @@
 ## Installing
 
 System is required to have Python 3.7 or greater to install.
-Run `make install`
+Run `make install`.
+Latest version of Python can be downloaded from https://www.python.org/downloads/
 
 ## Running
 
-To generate an address, run `make`.
-`make` will generate a new key-pair and spit out the public key (address) in decimal. 
+ Run `make` to generate an address.
+`make` generates a new key-pair and outputs the public key (address) in decimal. 
 
-To clean up, run `make clean-keys`.
+Run `make clean-keys` to clean up.
 
-To run test script, run `make test`
+Run `make test` to run test script.
 
 ## Current Status
 
