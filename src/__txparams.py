@@ -11,11 +11,11 @@ This details the length of each field in the transaction.
 Version = 1
 
 # Lengths
-lversion = 4
-lnumin = 4
+lversion = 1
+lnumin = 1
 lprevtxhash = 32
-ltxoutindex = 4
-lnumout = 4
+ltxoutindex = 1
+lnumout = 1
 lvalue = 8
 lpublicaddress = 32
 #s ignatures
@@ -23,4 +23,4 @@ lsigx = 32
 lsigy = 32
 lsigr = 32
 lsigq = 32
-lnumsig = 4
+lnumsig = 1

@@ -28,5 +28,5 @@ class MerkleList:
     hash = sha256()
     for txhash in self.txhashs:
       hash.update(txhash)
-    return hextoint(hash.hexdigest())
+    return hash.digest()
 

@@ -2,10 +2,12 @@
 
 ## Transactions
 ---
-* Header 12 bytes
-* Inputs - 64 bytes each
+* Version Number - 4 bytes
+* Num Inputs - 4 bytes
+* Inputs - 36 bytes each
   * First 32 bytes -> tx-id of input
-  * Second 32 bytes -> address of using input(x-coord)
+  * Second 4 bytes -> Index of Input
+* Num Outputs - 4 bytes
 * Outputs - 64 bytes each
   * First 32 bytes -> address of output(x-coord)
   * Second 32 bytes -> amount being sent(64 bits unsigned, should be maxed out at 0x8000000000000000, this was a major bug in Bitcoin, with negatives passing the tx verification, but it would actually create a lot of bitcoin for the addressholder) if I remember this bug came out in like 2010/2011, and it was patched very fast.
