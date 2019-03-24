@@ -5,16 +5,13 @@
 
 import time
 from hashlib import sha256
-from tools import tobytes, getbytes, hextoint, gethash, getbytes
+import tools
 from merkle import MerkleList
-import __blockparams
+import __blockparams as blockparams
 
 # internals
 from transaction import Transaction
 from keys import Keys
-
-kFirstReward = 50000000
-kHalvingBlocks = 210000
 
 class Block:
   def __init__(self, owner = None, prevhash = None):
@@ -22,10 +19,12 @@ class Block:
     self.next = None
     self.hash = None
     self.difficulty = 0
+    self.difficultyoffset = 0
     self.nonce = 0
     self.prevhash = prevhash
     self.timestamp = int(time.time())
     self.keys = None
+    self.target = tools.tobytes(0x0000FFFF * 2**208, 32)
     self.tx = []
     if not owner:
       # generate keys
@@ -41,50 +40,59 @@ class Block:
 
   def genesis_block(self):
     return 0
-  # serialize() => bytes
+
   def gen_header(self):
-    serial = tobytes(0,0)
+    serial = tools.tobytes(0,0)
     # Add Block Header
-    serial += tobytes(self.blockNo, 4)
-    serial += tobytes(self.nonce, 4)
-    serial += tobytes(self.prevhash, 32)
-    serial += tobytes(self.get_merkle(), 32)
-    serial += tobytes(self.timestamp, 8)
-    serial += tobytes(self.difficulty, 4)
-    serial += tobytes(len(self.tx), 4)
+    serial += tools.tobytes(blockparams.kMagicNum, blockparams.lmagicnum)
+    serial += tools.tobytes(blockparams.lversion, blockparams.kVersion)
+    serial += tools.tobytes(self.blockNo, blockparams.lblockno)
+    serial += tools.tobytes(self.nonce, blockparams.lnonce)
+    serial += tools.tobytes(self.prevhash, blockparams.lprevhash)
+    serial += tools.tobytes(self.get_merkle(), blockparams.lmerkle)
+    serial += tools.tobytes(self.timestamp, blockparams.ltimestamp)
+    serial += tools.tobytes(self.difficulty, blockparams.ldifficulty)
+    serial += tools.tobytes(self.difficultyoffset, blockparams.ldifficultyoffset)
+    serial += tools.tobytes(len(self.tx), blockparams.ltx)
     return serial
+  
+  def gen_target(self):
+    target = self.difficulty << (224-self.difficultyoffset)
+    self.target = tools.tobytes(target, 32)
+
+  # serialize() => bytes
   def serialize(self):
     serial = self.gen_header()
     for tx in self.tx:
       serial += tx.serialize()
     return serial
-  # get_hash() => int
+
+  # get_hash() => bytes (use merkleroot)
   def get_hash(self):
-    m = self.serialize()
-    hash = sha256()
-    hash.update(m)
-    return hextoint(hash.hexdigest())
+    m = self.gen_header()
+    return tools.gethash(m)
+
+  def get_hash_hex(self):
+    m = self.gen_header()
+    return tools.gethashhex(m)
 
   # Utilities
   def from_serial(self, message):
-    (self.blockNo, message) = getbytes(4, message)
-    (self.blockNo, message) = getbytes(4, message)
-    (self.blockNo, message) = getbytes(4, message)
-    (self.blockNo, message) = getbytes(4, message)
-    (self.blockNo, message) = getbytes(4, message)
-    (self.blockNo, message) = getbytes(4, message)
+    (self.blockNo, message) = tools.getbytes(4, message)
+    # TODO
+    pass
     
   def mine(self):
-    while self.get_hash() > 2**(256-self.difficulty):
-      self.__incremement_nonce()
+    while self.get_hash() > self.target:
+      self.nonce += 1
 
   def get_merkle(self):
-    merklelist = MerkleList(list(map(lambda x: x.get_hash_bytes(), self.tx)))
+    merklelist = MerkleList(list(map(lambda x: x.get_unsigned_hash(), self.tx)))
     return merklelist.merkleroot()
 
   # __get_generated() => int
   def __get_generated(self):
-    return kFirstReward >> int(self.blockNo/kHalvingBlocks)
+    return blockparams.kFirstReward >> int(self.blockNo/blockparams.kHalvingBlocks)
 
   # __get_block_reward() => int
   def __get_block_reward(self):

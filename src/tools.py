@@ -12,14 +12,26 @@ ENDIANNESS = "big"
 
 # tobytes(x : int, padding : int) => bytes
 def tobytes(x, padding):
+  if isinstance(x, bytes):
+    return x
   if x == None:
     x = 0
   return (x).to_bytes(padding, byteorder=ENDIANNESS)
 
 # getbytes(nbytes : int, message : bytes) => (int(of first nbytes), bytes(rest of message))
 def getbytes(nbytes: int, message: bytes):
+  if nbytes == -1:
+    nbytes = len(message)
   byte_list = list(message)
   return (int.from_bytes(byte_list[:nbytes], byteorder=ENDIANNESS), byte_list[nbytes:])
+
+def nbytes(nbytes: int, message: bytes):
+  byte_list = list(message)
+  return (byte_list[:nbytes], byte_list[nbytes:])
+
+def inttohex(i: int) -> str:
+  return hex(i)[1:]
+
 # hextoint(hex : string) => int
 def hextoint(hex):
   return int(hex, 16)
@@ -45,3 +57,7 @@ def gethashint(message):
   hash = sha256()
   hash.update(message)
   return hextoint(hash.hexdigest())
+
+def bytestohex(message: bytes) -> str:
+  (x, _x) = getbytes(-1, message)
+  return inttohex(x)
