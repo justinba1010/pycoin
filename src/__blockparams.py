@@ -10,7 +10,7 @@ kHalvingBlocks = 210000
 kMagicNum = 0xFADEFADE
 kVersion = 1
 
-lversion = 1
+lversion = 4
 lblockno = 4
 lmagicnum = 4
 lnonce = 4

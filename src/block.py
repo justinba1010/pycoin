@@ -45,7 +45,7 @@ class Block:
     serial = tools.tobytes(0,0)
     # Add Block Header
     serial += tools.tobytes(blockparams.kMagicNum, blockparams.lmagicnum)
-    serial += tools.tobytes(blockparams.lversion, blockparams.kVersion)
+    serial += tools.tobytes(blockparams.kVersion, blockparams.lversion)
     serial += tools.tobytes(self.blockNo, blockparams.lblockno)
     serial += tools.tobytes(self.nonce, blockparams.lnonce)
     serial += tools.tobytes(self.prevhash, blockparams.lprevhash)
