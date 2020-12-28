@@ -1,4 +1,4 @@
-# Copyright 2019 Justin Baum
+# Copyright 2020 Justin Baum
 # Pycoin
 # 11 February 2019
 # block.py
@@ -45,7 +45,7 @@ class Block:
     serial = tools.tobytes(0,0)
     # Add Block Header
     serial += tools.tobytes(blockparams.kMagicNum, blockparams.lmagicnum)
-    serial += tools.tobytes(blockparams.lversion, blockparams.kVersion)
+    serial += tools.tobytes(blockparams.kVersion, blockparams.lVersion)
     serial += tools.tobytes(self.blockNo, blockparams.lblockno)
     serial += tools.tobytes(self.nonce, blockparams.lnonce)
     serial += tools.tobytes(self.prevhash, blockparams.lprevhash)

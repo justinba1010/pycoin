@@ -1,3 +1,5 @@
+PIP = pip3.9
+PYTHON = python3.9
 
 init:
 	mkdir ./keys || true
@@ -9,10 +11,9 @@ clean-keys:
 	bash ./scripts/kindadangerous.sh
 
 install:
-	pip install fastecdsa base58
+	$(PIP) install fastecdsa base58 hexdump --user
 	# If this doesn't work you may need to find where fastecdsa is installed on your system
-	cp ./patch/ecdsa.py /usr/local/lib/python3.7/site-packages/fastecdsa/ecdsa.py
-	cp ./patch/util.py /usr/local/lib/python3.7/site-packages/fastecdsa/util.py
+	# This was patched upstream
 
 test:
-	pushd ./src/; python3 ./test.py; popd
+	pushd ./src/; $(PYTHON) ./test.py; popd

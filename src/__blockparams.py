@@ -1,4 +1,4 @@
-# Copyright 2019 Justin Baum
+# Copyright 2020 Justin Baum
 # Pycoin
 # 23 March 2019
 # __blockparams.py
@@ -9,8 +9,8 @@ kHalvingBlocks = 210000
 
 kMagicNum = 0xFADEFADE
 kVersion = 1
+lVersion = 1
 
-lversion = 1
 lblockno = 4
 lmagicnum = 4
 lnonce = 4
