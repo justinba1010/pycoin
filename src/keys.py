@@ -19,9 +19,9 @@ class Keys:
   def saveToFile(self, folder = ""):
     for (key, pub) in self.keys:
       s = tobytes(key, 32)
-      hash = sha256()
-      hash.update(s)
-      filename = hash.hexdigest()[:8]
+      hashy = sha256()
+      hashy.update(s)
+      filename = hashy.hexdigest()[:8]
       filename = KEYFOLDER + folder + filename + ".key"
       keys.export_key(key, curve=curve.secp256k1, filepath=filename)
   def genkey(self):

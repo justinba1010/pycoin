@@ -3,7 +3,7 @@
 # 10 March 2019
 # merkle.py
 
-# This is what we will be using instead of a merkle tree
+# Eventually wil be a merkle tree
 
 from hashlib import sha256
 from tools import tobytes, getbytes, hextoint

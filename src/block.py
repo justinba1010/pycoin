@@ -32,6 +32,8 @@ class Block:
       self.keys.genkey()
       self.owner = self.keys.keys[0][1].x
       self.keys.saveToFile("blockkeys/")
+    else:
+      self.owner = owner
 
   def gen_last_tx(self):
     lastTx = Transaction([], [(self.owner, self.__get_block_reward())])
@@ -55,6 +57,19 @@ class Block:
     serial += tools.tobytes(self.difficultyoffset, blockparams.ldifficultyoffset)
     serial += tools.tobytes(len(self.tx), blockparams.ltx)
     return serial
+
+  def de_header(self, message):
+    (kMagicNum, message) = tools.getbytes(blockparams.lmagicnum, message)
+    (kVersion, message) = tools.getbytes(blockparams.lVersion)
+    (self.blockNo, message) = tools.getbytes(blockparams.lblockno, message)
+    (self.nonce, message) = tools.getbytes(blockparams.lnonce, message)
+    (self.prevhash, message) = tools.getbytes(blockparams.lprevhash, message)
+    (self.merkle, message) = tools.getbytes(blockparams.lmerkle, message)
+    (self.timestamp, message) = tools.getbytes(blockparams.ltimestamp, message)
+    (self.difficulty, message) = tools.getbytes(blockparams.ldifficulty, message)
+    (self.difficultyoffset, message) = tools.getbytes(blockparams.ldifficultyoffset, message)
+    (_, message) = tools.getbytes(blockparams.ltx, message)
+    return message
   
   def gen_target(self):
     target = self.difficulty << (224-self.difficultyoffset)
@@ -78,9 +93,11 @@ class Block:
 
   # Utilities
   def from_serial(self, message):
-    (self.blockNo, message) = tools.getbytes(4, message)
-    # TODO
-    pass
+    message = self.de_header(message)
+    while message:
+      tx = Transaction()
+      message = tx.from_serial(message)
+      self.tx.append(tx)
     
   def mine(self):
     while self.get_hash() > self.target:
@@ -108,4 +125,6 @@ class Block:
 
   # __calculate_unspent() => int
   def __calculate_unspent(self):
-    return 0
+    for tx in self.tx:
+      unspent += tx.get_unspent()
+    return unspent

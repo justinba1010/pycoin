@@ -68,9 +68,16 @@ class Transaction:
       (r, message)  = tools.getbytes(txparams.lsigr, message)
       (q, message)  = tools.getbytes(txparams.lsigq, message)
       self.signatures.append((px, py, r, q))
+    return message
 
   def get_unsigned_hash(self):
     return tools.gethash(self.serialize())
 
   def get_unsigned_hex_hash(self):
     return tools.gethashhex(self.serialize())
+  
+  def __copy__(self):
+    copy = Transaction()
+    copy.origins = self.origins[:]
+    copy.destinations = self.destinations[:]
+    return copy
