@@ -17,3 +17,6 @@ install:
 
 test:
 	pushd ./src/; $(PYTHON) ./test.py; popd
+
+newkey:
+	pushd ./src/; $(PYTHON) -c "from keys import Keys; a = Keys(); a.genkey(); a.saveToFile(); print(\"Generated key\")"; popd

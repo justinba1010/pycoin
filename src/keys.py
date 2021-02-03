@@ -34,7 +34,7 @@ class Keys:
         self.keys.append((d,Q))
   def getaddresses(self):
     # Return addresses as b58(public key x coord)
-    return list(map(lambda x: str(tob58(x[1].x)), self.keys))
+    return list(map(lambda x: (tob58(x[1].x)), self.keys))
   def signTX(self, trans, nkey = 0):
     m = trans.serialize_unsigned()
     # Get currect keys to sign...

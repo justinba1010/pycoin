@@ -6,7 +6,7 @@
 import time
 from hashlib import sha256
 import tools
-from merkle import MerkleList
+from merkle import MerkleTree
 import __blockparams as blockparams
 
 # internals
@@ -104,8 +104,8 @@ class Block:
       self.nonce += 1
 
   def get_merkle(self):
-    merklelist = MerkleList(list(map(lambda x: x.get_unsigned_hash(), self.tx)))
-    return merklelist.merkleroot()
+    merkletree = MerkleTree(list(map(lambda x: x.get_unsigned_hash(), self.tx)))
+    return merkletree.merkleroot()
 
   # __get_generated() => int
   def __get_generated(self):

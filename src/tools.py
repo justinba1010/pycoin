@@ -30,7 +30,7 @@ def nbytes(nbytes: int, message: bytes):
   return (byte_list[:nbytes], byte_list[nbytes:])
 
 def inttohex(i: int) -> str:
-  return hex(i)[1:]
+  return hex(i)[2:]
 
 # hextoint(hex : string) => int
 def hextoint(hex):

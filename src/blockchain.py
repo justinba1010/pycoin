@@ -1,6 +1,6 @@
-# Copyright 2020 Justin Baum
+# Copyright 2021 Justin Baum
 # Pycoin
-# 6 January 2020
+# 6 January 2021
 # blockchain.py
 
 from block import Block
