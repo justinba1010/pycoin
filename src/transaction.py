@@ -3,6 +3,7 @@
 # 11 February 2019
 # transaction.py
 
+from fastecdsa import point, curve, ecdsa
 from hashlib import sha256
 import tools
 import __txparams as txparams
@@ -75,6 +76,34 @@ class Transaction:
 
   def get_unsigned_hex_hash(self):
     return tools.gethashhex(self.serialize())
+
+  def verify(self):
+    """
+    """
+    def check_signature(px, py, r, q):
+      msg = self.serialize_unsigned()
+      try:
+        Q = point.Point(px, py, curve.secp256k1)
+      except ecdsa.EcdsaError:
+        return False
+      except ValueError:
+        return False
+      return ecdsa.verify(
+        sig = (r, q), # signature
+        msg = msg,
+        Q = Q,
+        hashfunc = sha256,
+        curve = curve.secp256k1
+      )
+    for origin, signature in zip(self.origins, self.signatures):
+      (txid, index) = origin
+      (px, py, r, q) = signature
+      # TODO: Find tranasction
+      # TODO: Keep track if inputs > outputs
+      # TODO: Check to make sure tx not spent
+      if not check_signature(px, py, r, q):
+        return False
+    return True
   
   def __copy__(self):
     copy = Transaction()

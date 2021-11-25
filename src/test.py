@@ -26,6 +26,9 @@ print()
 hexdump(tx.serialize())
 print()
 
+print("Verifying the transaction: ")
+print(tx.verify())
+
 print("The new TX hash is: ")
 print(tools.bytestohex(tx.get_unsigned_hash()))
 
