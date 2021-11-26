@@ -4,6 +4,10 @@
 # tools.py
 
 import base58
+import fastecdsa.curve
+import fastecdsa.util
+import fastecdsa.point
+
 from hashlib import sha256
 
 ENDIANNESS = "big"
@@ -73,3 +77,16 @@ def gethashint(message):
 def bytestohex(message: bytes) -> str:
   (x, _x) = getbytes(-1, message)
   return inttohex(x)
+
+
+def get_y_coordinates(x: int) -> (int, int):
+  return fastecdsa.util.mod_sqrt(x**3 + 7, fastecdsa.curve.secp256k1.p)
+
+
+def address_to_points(address):
+  x, _ = getbytes(32, fromb58(address))
+  y1, y2 = get_y_coordinates(x)
+  return \
+      fastecdsa.point.Point(
+      x=x, y=y1, curve=fastecdsa.curve.secp256k1), fastecdsa.point.Point(
+          x=x, y=y2, curve=fastecdsa.curve.secp256k1)
