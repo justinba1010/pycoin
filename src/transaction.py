@@ -5,8 +5,9 @@
 
 from fastecdsa import point, curve, ecdsa
 from hashlib import sha256
-import tools
+
 import __txparams as txparams
+import tools
 
 
 class Transaction:
@@ -82,7 +83,7 @@ class Transaction:
   def get_unsigned_hex_hash(self):
     return tools.gethashhex(self.serialize())
 
-  def verify(self):
+  def verify(self, blockchain):
     """
     """
 
@@ -101,10 +102,17 @@ class Transaction:
           hashfunc=sha256,
           curve=curve.secp256k1)
 
+    origin_spend = 0
     for origin, signature in zip(self.origins, self.signatures):
       (txid, index) = origin
       (px, py, r, q) = signature
       # TODO: Find tranasction
+      tx = blockchain.tx.get(txid)
+      # Check if tx exists and the output exists
+      if not tx or index >= len(tx.destinations):
+        return False
+      destination = tx.destinations[index]
+
       # TODO: Keep track if inputs > outputs
       # TODO: Check to make sure tx not spent
       if not check_signature(px, py, r, q):
@@ -112,7 +120,7 @@ class Transaction:
     return True
 
   def __copy__(self):
-    copy = Transaction()
+    copy = transaction.Transaction()
     copy.origins = self.origins[:]
     copy.destinations = self.destinations[:]
     return copy

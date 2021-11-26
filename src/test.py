@@ -1,6 +1,7 @@
 from keys import Keys
 from transaction import Transaction
 from block import Block
+from blockchain import Blockchain
 import tools
 from hexdump import hexdump
 
@@ -9,6 +10,8 @@ wallet = Keys()
 ourkey = wallet.keys[-1]
 ownerkey = wallet.keys[-2]
 outputaddresses = wallet.getaddresses()
+
+blockchain = Blockchain()
 
 print("Private key: " + str(ourkey[0]))
 print("Public x: " + str(ourkey[1].x))
@@ -29,12 +32,13 @@ hexdump(tx.serialize())
 print()
 
 print("Verifying the transaction: ")
-print(tx.verify())
+print(tx.verify(blockchain))
 
 print("The new TX hash is: ")
 print(tools.bytestohex(tx.get_unsigned_hash()))
 
 block = Block(owner=ownerkey[1].x)
+blockchain.add_block(block)
 
 print("We will make a block: " + str(block.get_hash_hex()))
 block.tx.append(tx)
