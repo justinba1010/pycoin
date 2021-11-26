@@ -13,8 +13,10 @@ import __blockparams as blockparams
 from transaction import Transaction
 from keys import Keys
 
+
 class Block:
-  def __init__(self, owner = None, prevhash = None):
+
+  def __init__(self, owner=None, prevhash=None):
     self.blockNo = 0
     self.next = None
     self.hash = None
@@ -44,7 +46,7 @@ class Block:
     return 0
 
   def gen_header(self):
-    serial = tools.tobytes(0,0)
+    serial = tools.tobytes(0, 0)
     # Add Block Header
     serial += tools.tobytes(blockparams.kMagicNum, blockparams.lmagicnum)
     serial += tools.tobytes(blockparams.kVersion, blockparams.lVersion)
@@ -54,7 +56,8 @@ class Block:
     serial += tools.tobytes(self.get_merkle(), blockparams.lmerkle)
     serial += tools.tobytes(self.timestamp, blockparams.ltimestamp)
     serial += tools.tobytes(self.difficulty, blockparams.ldifficulty)
-    serial += tools.tobytes(self.difficultyoffset, blockparams.ldifficultyoffset)
+    serial += tools.tobytes(self.difficultyoffset,
+                            blockparams.ldifficultyoffset)
     serial += tools.tobytes(len(self.tx), blockparams.ltx)
     return serial
 
@@ -66,13 +69,15 @@ class Block:
     (self.prevhash, message) = tools.getbytes(blockparams.lprevhash, message)
     (self.merkle, message) = tools.getbytes(blockparams.lmerkle, message)
     (self.timestamp, message) = tools.getbytes(blockparams.ltimestamp, message)
-    (self.difficulty, message) = tools.getbytes(blockparams.ldifficulty, message)
-    (self.difficultyoffset, message) = tools.getbytes(blockparams.ldifficultyoffset, message)
+    (self.difficulty, message) = tools.getbytes(blockparams.ldifficulty,
+                                                message)
+    (self.difficultyoffset,
+     message) = tools.getbytes(blockparams.ldifficultyoffset, message)
     (_, message) = tools.getbytes(blockparams.ltx, message)
     return message
-  
+
   def gen_target(self):
-    target = self.difficulty << (224-self.difficultyoffset)
+    target = self.difficulty << (224 - self.difficultyoffset)
     self.target = tools.tobytes(target, 32)
 
   # serialize() => bytes
@@ -98,7 +103,7 @@ class Block:
       tx = Transaction()
       message = tx.from_serial(message)
       self.tx.append(tx)
-    
+
   def mine(self):
     while self.get_hash() > self.target:
       self.nonce += 1
@@ -109,7 +114,8 @@ class Block:
 
   # __get_generated() => int
   def __get_generated(self):
-    return blockparams.kFirstReward >> int(self.blockNo/blockparams.kHalvingBlocks)
+    return blockparams.kFirstReward >> int(
+        self.blockNo / blockparams.kHalvingBlocks)
 
   # __get_block_reward() => int
   def __get_block_reward(self):

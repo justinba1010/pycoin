@@ -2,7 +2,6 @@
 # Pycoin
 # 21 March 2019
 # __txparams.py
-
 """
 This details the length of each field in the transaction.
 """

@@ -6,8 +6,10 @@
 from hashlib import sha256
 from tools import tobytes, getbytes, hextoint
 
+
 class MerkleTree:
-  def __init__(self, txs = None):
+
+  def __init__(self, txs=None):
     self.txhashs = []
     if isinstance(txs, list):
       self.addtxs(txs)
@@ -19,9 +21,11 @@ class MerkleTree:
   @staticmethod
   def left(n):
     return (n << 1) + 1
+
   @staticmethod
   def right(n):
     return (n << 1) + 2
+
   @staticmethod
   def up(n):
     return (n - 1) >> 1
@@ -31,10 +35,10 @@ class MerkleTree:
 
   def addtx(self, txhash):
     self.txhashs.append(txhash)
-  
+
   def merkleroot(self):
     return sha256(self.merkleroot_(0, len(self.txhashs) - 1)).digest()
-  
+
   def merkleroot_(self, n, x):
     left = MerkleTree.left(n)
     right = MerkleTree.right(n)

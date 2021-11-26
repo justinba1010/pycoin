@@ -8,8 +8,10 @@ from hashlib import sha256
 import tools
 import __txparams as txparams
 
+
 class Transaction:
-  def __init__(self, origins = [], destinations = []):
+
+  def __init__(self, origins=[], destinations=[]):
     # origins are tuples of (tx hashes, index)
     # destinations are tuples of (address, and amounts)
     self.origins = origins
@@ -21,18 +23,21 @@ class Transaction:
 
   def serialize_unsigned(self):
     # start a byte sequence
-    serial = tools.tobytes(0,0)
+    serial = tools.tobytes(0, 0)
     serial += tools.tobytes(txparams.Version, txparams.lversion)
     serial += tools.tobytes(len(self.origins), txparams.lnumin)
     for origin in self.origins:
       # 64 bytes for each input
-      serial += tools.tobytes(origin[0], txparams.lprevtxhash)  # tx hash of origin
+      serial += tools.tobytes(origin[0],
+                              txparams.lprevtxhash)  # tx hash of origin
       serial += tools.tobytes(origin[1], txparams.ltxoutindex)  # tx index
     serial += tools.tobytes(len(self.destinations), txparams.lnumout)
     for destination in self.destinations:
       # 64 bytes for each output
-      serial += tools.tobytes(destination[0], txparams.lpublicaddress)  # public x of destination
-      serial += tools.tobytes(destination[1], txparams.lvalue)  # amount in units
+      serial += tools.tobytes(
+          destination[0], txparams.lpublicaddress)  # public x of destination
+      serial += tools.tobytes(destination[1],
+                              txparams.lvalue)  # amount in units
     return serial
 
   def serialize(self):
@@ -66,8 +71,8 @@ class Transaction:
     for i in range(nSignatures):
       (px, message) = tools.getbytes(txparams.lsigx, message)
       (py, message) = tools.getbytes(txparams.lsigy, message)
-      (r, message)  = tools.getbytes(txparams.lsigr, message)
-      (q, message)  = tools.getbytes(txparams.lsigq, message)
+      (r, message) = tools.getbytes(txparams.lsigr, message)
+      (q, message) = tools.getbytes(txparams.lsigq, message)
       self.signatures.append((px, py, r, q))
     return message
 
@@ -80,6 +85,7 @@ class Transaction:
   def verify(self):
     """
     """
+
     def check_signature(px, py, r, q):
       msg = self.serialize_unsigned()
       try:
@@ -89,12 +95,12 @@ class Transaction:
       except ValueError:
         return False
       return ecdsa.verify(
-        sig = (r, q), # signature
-        msg = msg,
-        Q = Q,
-        hashfunc = sha256,
-        curve = curve.secp256k1
-      )
+          sig=(r, q),  # signature
+          msg=msg,
+          Q=Q,
+          hashfunc=sha256,
+          curve=curve.secp256k1)
+
     for origin, signature in zip(self.origins, self.signatures):
       (txid, index) = origin
       (px, py, r, q) = signature
@@ -104,7 +110,7 @@ class Transaction:
       if not check_signature(px, py, r, q):
         return False
     return True
-  
+
   def __copy__(self):
     copy = Transaction()
     copy.origins = self.origins[:]

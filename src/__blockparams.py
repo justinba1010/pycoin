@@ -3,7 +3,6 @@
 # 23 March 2019
 # __blockparams.py
 
-
 kFirstReward = 50000000
 kHalvingBlocks = 210000
 

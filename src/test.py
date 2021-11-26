@@ -18,8 +18,10 @@ for counter, address in enumerate(wallet.getaddresses()):
 
 tx = Transaction(origins=[(outputaddresses[0], 1), (outputaddresses[1], 2)])
 print("Transaction has no origins:")
-print("Transaction has output to {} with amount {}".format(outputaddresses[0], 1))
-print("Transaction has output to {} with amount {}".format(outputaddresses[2], 2))
+print("Transaction has output to {} with amount {}".format(
+    outputaddresses[0], 1))
+print("Transaction has output to {} with amount {}".format(
+    outputaddresses[2], 2))
 wallet.signTX(tx, -1)
 print("This is our signed transaction:")
 print()
@@ -40,7 +42,7 @@ print("We will add the tx: " + str(block.get_hash_hex()))
 
 hexdigits = 4
 block.difficulty = 0xFFFFFFFF
-block.difficultyoffset = hexdigits*4
+block.difficultyoffset = hexdigits * 4
 block.gen_target()
 
 print()
@@ -48,7 +50,8 @@ print("This is the block contents ")
 hexdump(block.serialize())
 print()
 
-print("We will now mine it until the first " + str(hexdigits) + " hex digits are 0")
+print("We will now mine it until the first " + str(hexdigits) +
+      " hex digits are 0")
 
 block.mine()
 print("The block finished mining at nonce: " + str(block.nonce))
